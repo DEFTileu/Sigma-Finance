@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: sigma-finance-db
+    environment:
+      POSTGRES_DB: sigma_db
+      POSTGRES_PASSWORD: test12345
+      LANG: ru_RU.utf8
+    ports:
+      - "5432:5432"
+    volumes:
+      - sigma_postgres_data:/var/lib/postgresql/data
+    networks:
+      - sigma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  sigma_postgres_data:
+    name: sigma_postgres_data
+
+networks:
+  sigma-network:
+    driver: bridge
