@@ -6,6 +6,8 @@ import kz.javazhan.sigma_finance.domain.entities.User;
 import kz.javazhan.sigma_finance.domain.enums.AccountStatusEnum;
 import kz.javazhan.sigma_finance.domain.enums.AccountType;
 import kz.javazhan.sigma_finance.domain.enums.CurrencyTypeEnum;
+import kz.javazhan.sigma_finance.domain.factories.AccountFactory;
+import kz.javazhan.sigma_finance.domain.factories.AccountFactoryProvider;
 import kz.javazhan.sigma_finance.repositories.AccountRepository;
 import kz.javazhan.sigma_finance.services.AccountService;
 import kz.javazhan.sigma_finance.services.UserService;
@@ -33,27 +35,30 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<BankAccount> createDefoultAccount2NewUser(User user) {
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setOwner(user);
-        bankAccount.setCurrency(CurrencyTypeEnum.KZT);
-        bankAccount.setStatus(AccountStatusEnum.ACTIVE);
-        bankAccount.setAccountNumber(generateAccountNumber());
-        bankAccount.setBalance(0.0);
-        bankAccount.setAccountType(AccountType.BONUS);
+        AccountFactory currentFactory = AccountFactoryProvider.getFactory(AccountType.CURRENT);
+        BankAccount currentAccount = currentFactory.createAccount(
+                generateAccountNumber(),
+                0L,
+                CurrencyTypeEnum.KZT,
+                AccountStatusEnum.ACTIVE,
+                user
+        );
 
+        AccountFactory bonusFactory = AccountFactoryProvider.getFactory(AccountType.BONUS);
+        BankAccount bonusAccount;
 
-        BankAccount currentAccount = BankAccount.builder()
-                .owner(user)
-                .accountNumber(generateAccountNumber())
-                .currency(CurrencyTypeEnum.KZT)
-                .status(AccountStatusEnum.ACTIVE)
-                .balance(0.0)
-                .accountType(AccountType.CURRENT)
-                .build();
+        bonusAccount = bonusFactory.createAccount(
+                generateAccountNumber(),
+                0L,
+                CurrencyTypeEnum.KZT,
+                AccountStatusEnum.ACTIVE,
+                user
+        );
+
 
         List<BankAccount> bankAccounts = new ArrayList<>();
         bankAccounts.add(currentAccount);
-        bankAccounts.add(bankAccount);
+        bankAccounts.add(bonusAccount);
         return accountRepository.saveAll(bankAccounts);
     }
 
@@ -73,4 +78,3 @@ public class AccountServiceImpl implements AccountService {
 
 
 }
-

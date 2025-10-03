@@ -25,13 +25,12 @@ public class AccountController {
     @GetMapping("")
     public List<BankAccount> getMyMainAccount() {
         User user = userService.getCurrentUser();
-        List<BankAccount> accounts = accountRepository.findAllByOwner(user).stream().map(
+        return accountRepository.findAllByOwner(user).stream().map(
                 account -> {
                     account.setOwner(null);
                     return account;
                 }
         ).toList();
-        return accounts;
     }
 
     @GetMapping("/bonus")

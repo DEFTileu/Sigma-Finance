@@ -1,10 +1,9 @@
 package kz.javazhan.sigma_finance.services;
 
-import kz.javazhan.sigma_finance.domain.entities.BankAccount;
 import kz.javazhan.sigma_finance.domain.entities.User;
 
-public interface UserService {
-    public User getCurrentUser();
+ public interface UserService {
+     User getCurrentUser();
 
-    public User findUserByPhone(String phone);
+     User findUserByPhone(String phone);
 }

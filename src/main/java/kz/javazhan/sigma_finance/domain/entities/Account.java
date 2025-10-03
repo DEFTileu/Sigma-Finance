@@ -15,7 +15,7 @@ public abstract class Account{
     UUID id;
     String accountNumber;
     AccountType accountType;
-    double balance;
+    long balance;
     CurrencyTypeEnum currencyType;
     AccountStatusEnum status;
 }

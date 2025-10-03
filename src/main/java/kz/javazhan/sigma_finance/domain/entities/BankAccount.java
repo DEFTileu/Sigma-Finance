@@ -39,7 +39,7 @@ public class BankAccount extends Account{
     private AccountType accountType;
 
     @Column(nullable = false)
-    private double balance;
+    private long balance;
 
     @Column(nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
@@ -75,6 +75,8 @@ public class BankAccount extends Account{
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountNumber, accountType, balance, currency, status, createdAt, updatedAt);
+        return Objects.hash(getId(), getAccountNumber(), getAccountType(), getBalance(), getCurrency(), getStatus(), getOwner(), getTransactions(), getCreatedAt(), getUpdatedAt());
     }
+
+
 }
