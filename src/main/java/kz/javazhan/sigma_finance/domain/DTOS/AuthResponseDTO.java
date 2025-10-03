@@ -1,6 +1,5 @@
 package kz.javazhan.sigma_finance.domain.DTOS;
 
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

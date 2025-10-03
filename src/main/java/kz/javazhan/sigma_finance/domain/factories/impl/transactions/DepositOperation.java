@@ -23,7 +23,7 @@ public class DepositOperation implements TransactionOperation {
 
         return Transaction.builder()
                 .transactionType(TransactionType.DEPOSIT)
-                .amount(amount) // Положительная сумма для депозита
+                .amount(amount)
                 .sourceAccount(account)
                 .targetAccount(account)
                 .status(TransactionStatus.PENDING)

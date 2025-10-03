@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -22,6 +21,6 @@ public class AccountsDTO {
     private AccountType accountType;
     private CurrencyTypeEnum currency;
     private AccountStatusEnum status;
-    private BigDecimal balance;
+    private long balance;
     private Long ownerId;
 }

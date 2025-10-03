@@ -23,6 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "bank_accounts")
 @ToString
 public class BankAccount extends Account{
     @Id
@@ -46,6 +47,7 @@ public class BankAccount extends Account{
     private CurrencyTypeEnum currency;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AccountStatusEnum status;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -78,5 +80,8 @@ public class BankAccount extends Account{
         return Objects.hash(getId(), getAccountNumber(), getAccountType(), getBalance(), getCurrency(), getStatus(), getOwner(), getTransactions(), getCreatedAt(), getUpdatedAt());
     }
 
+    public boolean isActive() {
+        return this.status == AccountStatusEnum.ACTIVE;
+    }
 
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -13,8 +12,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransferRequestDTO {
-    private UUID sourceAccountId;
-    private UUID destinationAccountId;
-    private BigDecimal amount;
+    private Long sourceAccountId;
+    private Long destinationAccountId;
+    private long amount;
     private String description;
 }

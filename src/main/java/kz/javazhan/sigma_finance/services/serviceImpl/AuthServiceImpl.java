@@ -4,6 +4,7 @@ import kz.javazhan.sigma_finance.components.JwtUtils;
 import kz.javazhan.sigma_finance.domain.DTOS.AuthRequestDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.AuthResponseDTO;
 import kz.javazhan.sigma_finance.domain.entities.User;
+import kz.javazhan.sigma_finance.domain.enums.UserRole;
 import kz.javazhan.sigma_finance.mappers.UserMapper;
 import kz.javazhan.sigma_finance.repositories.UserRepository;
 import kz.javazhan.sigma_finance.services.AccountService;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -41,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = userMapper.toUser(request);
+        user.setRoles(List.of(UserRole.USER_ROLE));
 
 
         log.info("Registering user: {}", user);

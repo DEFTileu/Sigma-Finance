@@ -1,6 +1,5 @@
 package kz.javazhan.sigma_finance.controllers;
 
-import kz.javazhan.sigma_finance.domain.DTOS.UserDTO;
 import kz.javazhan.sigma_finance.domain.entities.BankAccount;
 import kz.javazhan.sigma_finance.domain.entities.User;
 import kz.javazhan.sigma_finance.domain.enums.AccountType;
@@ -8,10 +7,8 @@ import kz.javazhan.sigma_finance.repositories.AccountRepository;
 import kz.javazhan.sigma_finance.services.AccountService;
 import kz.javazhan.sigma_finance.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

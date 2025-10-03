@@ -1,6 +1,5 @@
 package kz.javazhan.sigma_finance.domain.entities;
 
-import jakarta.websocket.server.ServerEndpoint;
 import kz.javazhan.sigma_finance.domain.enums.AccountStatusEnum;
 import kz.javazhan.sigma_finance.domain.enums.AccountType;
 import kz.javazhan.sigma_finance.domain.enums.CurrencyTypeEnum;
