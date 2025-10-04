@@ -1,5 +1,6 @@
 package kz.javazhan.sigma_finance.services.serviceImpl;
 
+import kz.javazhan.sigma_finance.domain.DTOS.SelfTransferRequestDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.TransactionHistoryDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.TransferRequestDTO;
 import kz.javazhan.sigma_finance.domain.entities.BankAccount;
@@ -14,6 +15,7 @@ import kz.javazhan.sigma_finance.domain.factories.TransactionFactoryProvider;
 import kz.javazhan.sigma_finance.exceptions.TransactionException;
 import kz.javazhan.sigma_finance.repositories.AccountRepository;
 import kz.javazhan.sigma_finance.repositories.TransactionRepository;
+import kz.javazhan.sigma_finance.services.CurrencyService;
 import kz.javazhan.sigma_finance.services.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -29,6 +32,7 @@ import java.util.List;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository bankAccountRepository;
+    private final CurrencyService currencyService;
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -61,13 +65,20 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    @Override
     @Transactional
-    public Transaction transferByPhone(TransferRequestDTO transactionDTO) {
+    @Override
+    public TransactionHistoryDTO transferByPhoneAndReturnHistory(TransferRequestDTO transactionDTO, long userId) {
         BankAccount fromAccount = bankAccountRepository.findByOwnerAndAccountType(
                 User.builder().id(transactionDTO.getSourceAccountId()).build(),
                 AccountType.CURRENT)
                 .getFirst();
+//        if (transactionDTO.isUseBonuses()){
+//            BankAccount bonusAccount = bankAccountRepository.findByOwnerAndAccountType(
+//                    User.builder().id(userId).build(),
+//                    AccountType.BONUS)
+//                    .getFirst();
+//            fromAccount.setBalance(fromAccount.getBalance() - bonusAccount.getBalance());
+//        }
 
         log.info("From account: {}", fromAccount);
         BankAccount toAccount = bankAccountRepository.findByOwnerAndAccountType(
@@ -75,8 +86,21 @@ public class TransactionServiceImpl implements TransactionService {
                 AccountType.CURRENT)
                 .getFirst();
         log.info("To account: {}", toAccount);
-        return transfer(fromAccount, toAccount, transactionDTO.getAmount(), transactionDTO.getDescription());
+        Transaction transaction = transfer(fromAccount, toAccount, transactionDTO.getAmount(), transactionDTO.getDescription());
+        return mapToHistoryDTO(transaction, List.of(fromAccount, toAccount));
     }
+
+    @Override
+    public TransactionHistoryDTO selfTransferFromDTOAndReturnHistory(SelfTransferRequestDTO transferDTO, long userId) {
+        BankAccount fromAccount = bankAccountRepository.findById(transferDTO.getFromAccountId())
+                .orElseThrow(() -> new TransactionException("Счет отправителя не найден с ID: " + transferDTO.getFromAccountId()));
+        BankAccount toAccount = bankAccountRepository.findById(transferDTO.getToAccountId())
+                .orElseThrow(() -> new TransactionException("Счет получателя не найден с ID: " + transferDTO.getToAccountId()));
+
+        Transaction transaction = selfTransfer(fromAccount, toAccount, transferDTO.getAmount(), "Перевод между собственными счетами");
+        return mapToHistoryDTO(transaction, List.of(fromAccount, toAccount));
+    }
+
 
     @Override
     public List<Transaction> getTransactionsByUserId(Long id) {
@@ -103,6 +127,46 @@ public class TransactionServiceImpl implements TransactionService {
                 .map(transaction -> mapToHistoryDTO(transaction, userAccounts))
                 .sorted((t1, t2) -> t2.getCreatedAt().compareTo(t1.getCreatedAt()))
                 .toList();
+    }
+
+    @Override
+    public TransactionHistoryDTO getTransactionByIdAndUserId(UUID transactionId, Long userId) {
+        List<BankAccount> userAccounts = bankAccountRepository.findAllByOwner(
+                User.builder().id(userId).build()
+        );
+
+        Transaction transaction = transactionRepository.findByIdAndUserId(transactionId, userId)
+                .orElseThrow(() -> new TransactionException("Транзакция с ID " + transactionId + " не найдена для пользователя с ID " + userId));
+
+        log.info("Найдена транзакция с ID {} для пользователя с ID {}", transactionId, userId);
+
+        return mapToHistoryDTO(transaction, userAccounts);
+    }
+
+    @Override
+    public Transaction selfTransfer(BankAccount fromAccount, BankAccount toAccount, Long amount, String description) {
+        //lets check if accounts belong to the same user
+        if (!fromAccount.getOwner().getId().equals(toAccount.getOwner().getId())) {
+            throw new TransactionException("Перевод на собственный счет возможен только между счетами одного пользователя.");
+        }
+        if (fromAccount.getId().equals(toAccount.getId())) {
+            throw new TransactionException("Нельзя перевести на тот же самый счет.");
+        }
+        if (fromAccount.getBalance() < amount) {
+            throw new TransactionException("Недостаточно средств на счете для перевода.");
+        }
+        if (fromAccount.getCurrency().equals(toAccount.getCurrency())) {
+            return transfer(fromAccount, toAccount, amount, description);
+
+        } else {
+            long convertedAmount = currencyService.convertAmount(
+                    fromAccount.getCurrency(),
+                    toAccount.getCurrency(),
+                    amount
+            );
+            return transfer(fromAccount, toAccount, amount, description + " (Конвертация: " + convertedAmount + " " + toAccount.getCurrency() + ")");
+
+        }
     }
 
     private TransactionHistoryDTO mapToHistoryDTO(Transaction transaction, List<BankAccount> userAccounts) {

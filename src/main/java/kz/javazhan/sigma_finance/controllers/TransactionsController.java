@@ -1,5 +1,6 @@
 package kz.javazhan.sigma_finance.controllers;
 
+import kz.javazhan.sigma_finance.domain.DTOS.SelfTransferRequestDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.TransactionDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.TransactionHistoryDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.TransferRequestDTO;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -31,6 +33,16 @@ public class TransactionsController {
         return ResponseEntity.ok(transactionDTOS);
     }
 
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TransactionHistoryDTO> getTransactionById(@PathVariable UUID id) {
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransactionHistoryDTO transactionDTO = transactionService.getTransactionByIdAndUserId(id, user.getId());
+
+        return ResponseEntity.ok(transactionDTO);
+    }
+
     @GetMapping("/history")
     public ResponseEntity<List<TransactionHistoryDTO>> getTransactionHistory(
             @RequestParam(required = false) TransactionType type
@@ -42,8 +54,16 @@ public class TransactionsController {
     }
 
     @PostMapping("/phone")
-    public ResponseEntity<?> transferByPhone(@RequestBody TransferRequestDTO transactionDTO) {
-        transactionService.transferByPhone(transactionDTO);
-        return ResponseEntity.ok("LOLOL");
+    public ResponseEntity<TransactionHistoryDTO> transferByPhone(@RequestBody TransferRequestDTO transactionDTO) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransactionHistoryDTO dto = transactionService.transferByPhoneAndReturnHistory(transactionDTO, user.getId());
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/self-transfer")
+    public ResponseEntity<TransactionHistoryDTO> transferBySelfTransfer(@RequestBody SelfTransferRequestDTO requestDTO) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransactionHistoryDTO dto = transactionService.selfTransferFromDTOAndReturnHistory(requestDTO, user.getId());
+        return ResponseEntity.ok(dto);
     }
 }

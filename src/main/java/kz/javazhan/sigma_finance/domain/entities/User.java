@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
     private String patronymic;
 
-    private String AvatarUrl;
+    private String avatarUrl;
 
     private String phoneNumber;
 

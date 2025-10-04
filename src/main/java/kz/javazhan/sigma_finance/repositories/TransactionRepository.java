@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -15,4 +16,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     @Query("SELECT t FROM Transaction t JOIN BankAccount b ON t.sourceAccount = b OR t.targetAccount = b WHERE b.owner.id = :userId")
     List<Transaction> historyOfTransactions(Long userId);
+
+    @Query("SELECT t FROM Transaction t JOIN BankAccount b ON t.sourceAccount = b OR t.targetAccount = b WHERE t.id = :transactionId AND b.owner.id = :userId")
+    Optional<Transaction> findByIdAndUserId(UUID transactionId, Long userId);
 }

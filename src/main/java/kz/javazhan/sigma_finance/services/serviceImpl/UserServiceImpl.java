@@ -1,5 +1,6 @@
 package kz.javazhan.sigma_finance.services.serviceImpl;
 
+import kz.javazhan.sigma_finance.domain.DTOS.UserDTO;
 import kz.javazhan.sigma_finance.domain.entities.User;
 import kz.javazhan.sigma_finance.repositories.UserRepository;
 import kz.javazhan.sigma_finance.services.UserService;
@@ -38,5 +39,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByPhoneNumber((phone)).orElseThrow(
                 () -> new RuntimeException("Пользователь с таким номером не найден")
         );
+    }
+
+    @Override
+    public User changeProfile(UserDTO userDTO) {
+        User user = getCurrentUser();
+        if (userDTO.getName() != null){user.setName(userDTO.getName());}
+        if (userDTO.getSurname() != null){user.setSurname(userDTO.getSurname());}
+        if (userDTO.getPatronymic() != null){user.setPatronymic(userDTO.getPatronymic());}
+        if (userDTO.getAvatarUrl() != null){user.setAvatarUrl(userDTO.getAvatarUrl());}
+        return userRepository.save(user);
     }
 }

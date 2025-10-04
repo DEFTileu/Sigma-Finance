@@ -16,4 +16,5 @@ public class TransferRequestDTO {
     private Long destinationAccountId;
     private long amount;
     private String description;
+    private boolean useBonuses;
 }

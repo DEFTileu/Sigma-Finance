@@ -17,7 +17,7 @@ public class UserDTO {
     private String name;
     private String surname;
     private String patronymic;
-    private String AvatarUrl;
+    private String avatarUrl;
     private String phoneNumber;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
