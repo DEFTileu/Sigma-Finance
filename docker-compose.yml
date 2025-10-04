@@ -1,29 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15
-    container_name: sigma-finance-db
-    env_file:
-      - .env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      LANG: ${POSTGRES_LANG:-ru_RU.utf8}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    volumes:
-      - sigma_postgres_data:/var/lib/postgresql/data
-    networks:
-      - sigma-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: always
-
   app:
     build:
       context: .
@@ -44,17 +21,4 @@ services:
       CURRENCY_API_KEY: ${CURRENCY_API_KEY}
     ports:
       - "${SERVER_PORT:-8080}:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - sigma-network
     restart: always
-
-volumes:
-  sigma_postgres_data:
-    name: sigma_postgres_data
-
-networks:
-  sigma-network:
-    driver: bridge
