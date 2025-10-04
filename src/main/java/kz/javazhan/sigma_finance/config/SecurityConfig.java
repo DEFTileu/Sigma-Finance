@@ -52,11 +52,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        List<String> origins = Arrays.stream(allowedOrigins.split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-        config.setAllowedOrigins(origins);
+        config.setAllowedOrigins(List.of("http://localhost:8081/","http://localhost:5174","https://sigma-finance.vercel.app","todofrontend-y9ud.onrender.com","https://1ba290bc1b99.ngrok-free.app/"));
         config.setAllowedMethods(List.of("GET", "POST","PATCH", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

@@ -16,7 +16,7 @@ application:
       refresh-token:
         expiration: 1209600000 # 14 days
   cors:
-    allowed-origins: ["*"]
+    allowed_origins: ["*"]
 
 currency:
   apiKey: 1e4044b19708743514f8ce5b
