@@ -27,9 +27,9 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/sigma_db}
+    url: ${DB_URL:jdbc:postgresql://db.tkczpzeamfwnzntujxoj.supabase.co:5432/postgres?sslmode=require}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:test12345}
+    password: ${DB_PASSWORD:BEnByCtika4xy68v}
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
@@ -54,9 +54,9 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: ${DB_URL:jdbc:postgresql://postgres:5432/sigma_db}
+    url: ${DB_URL:jdbc:postgresql://db.tkczpzeamfwnzntujxoj.supabase.co:5432/postgres?sslmode=require}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    password: ${DB_PASSWORD:BEnByCtika4xy68v}
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
@@ -80,9 +80,9 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/sigma_db}
+    url: ${DB_URL:jdbc:postgresql://db.tkczpzeamfwnzntujxoj.supabase.co:5432/postgres?sslmode=require}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:}
+    password: ${DB_PASSWORD:BEnByCtika4xy68v}
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
