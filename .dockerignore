@@ -1,0 +1,20 @@
+# Exclude files from Docker build context
+.git
+.gitignore
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# Build outputs
+/target
+
+# Local env and secrets
+.env
+.env.*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+

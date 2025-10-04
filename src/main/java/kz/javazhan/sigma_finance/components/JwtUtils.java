@@ -9,6 +9,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
@@ -36,7 +37,12 @@ public class JwtUtils {
         if (jwtRefreshTokenExpirationMs == 0 && jwtAccessTokenExpirationMs == 0){
             throw new IllegalStateException("Expiration miliSecond is not set!");
         }
-        this.signingKey = Keys.hmacShaKeyFor(secretKey.getBytes());
+        // Для HS512 требуется ключ >= 64 байт; используем один секрет для HS256 и HS512
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        if (keyBytes.length < 64) {
+            throw new IllegalStateException("JWT secret key must be at least 64 bytes for HS512 (refresh tokens). Current length: " + keyBytes.length + " bytes");
+        }
+        this.signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
 
