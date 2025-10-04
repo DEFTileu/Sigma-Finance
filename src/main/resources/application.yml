@@ -1,14 +1,4 @@
-#spring:
-#  application:
-#    name: Sigma Finance
-#    security:
-#      jwt:
-#        secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-#        expiration: 900000 # 15 minutes
-#        refresh-token:
-#          expiration: 1209600000 # 14 days
-#  profiles:
-#    active: prod
+
 
 server:
   port: 8080
@@ -28,11 +18,8 @@ currency:
 
 ---
 spring:
-  config:
-    activate:
-      on-profile: prod
   datasource:
-    url: jdbc:postgresql://db.tkczpzeamfwnzntujxoj.supabase.co:5432/postgres?sslmode=require
+    url: jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?user=postgres.tkczpzeamfwnzntujxoj&password=BEnByCtika4xy68v&sslmode=require
     username: postgres
     password: BEnByCtika4xy68v
     driver-class-name: org.postgresql.Driver
