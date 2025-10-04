@@ -1,8 +1,14 @@
-spring:
-  application:
-    name: Sigma Finance
-  profiles:
-    active: prod
+#spring:
+#  application:
+#    name: Sigma Finance
+#    security:
+#      jwt:
+#        secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+#        expiration: 900000 # 15 minutes
+#        refresh-token:
+#          expiration: 1209600000 # 14 days
+#  profiles:
+#    active: prod
 
 server:
   port: 8080
@@ -15,8 +21,7 @@ application:
       expiration: 900000 # 15 minutes
       refresh-token:
         expiration: 1209600000 # 14 days
-  cors:
-    allowed_origins: ["*"]
+
 
 currency:
   apiKey: 1e4044b19708743514f8ce5b
@@ -25,7 +30,7 @@ currency:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
   datasource:
     url: jdbc:postgresql://db.tkczpzeamfwnzntujxoj.supabase.co:5432/postgres?sslmode=require
     username: postgres
