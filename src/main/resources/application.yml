@@ -19,9 +19,9 @@ currency:
 ---
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:AkpJysoJYCkPnIpeGfOtCkYNYdnbIBCI@shuttle.proxy.rlwy.net:42626/railway
+    url: jdbc:postgresql://shortline.proxy.rlwy.net:35777/railway
     username: postgres
-    password: AkpJysoJYCkPnIpeGfOtCkYNYdnbIBCI
+    password: KnCfKBIaBNnhlXAiXdKRGMKunqCfuLKl
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
