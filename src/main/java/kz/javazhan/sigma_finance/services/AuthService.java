@@ -9,4 +9,6 @@ import kz.javazhan.sigma_finance.domain.DTOS.AuthResponseDTO;
      AuthResponseDTO login(AuthRequestDTO request);
 
      String logout(String refreshToken);
-}
+
+     AuthResponseDTO refreshToken(String refreshToken);
+ }

@@ -92,4 +92,19 @@ public class AuthServiceImpl implements AuthService {
     public String logout(String refreshToken) {
         return "";
     }
+
+    @Override
+    public AuthResponseDTO refreshToken(String refreshToken) {
+        User user = userRepository.findByUsername(jwtUtils.extractEmail(refreshToken)).orElseThrow(
+                () -> new UsernameNotFoundException("User not found by email: " + jwtUtils.extractEmail(refreshToken)));
+
+        String newAccessToken = jwtUtils.generateToken(user.getUsername());
+        String newRefreshToken = jwtUtils.generateRefreshToken(user.getUsername());
+
+        return AuthResponseDTO.builder()
+                .refreshToken(newRefreshToken)
+                .accessToken(newAccessToken)
+                .user(userMapper.toUserDTO(user))
+                .build();
+    }
 }
