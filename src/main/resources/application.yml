@@ -19,9 +19,9 @@ currency:
 ---
 spring:
   datasource:
-    url: jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?user=postgres.tkczpzeamfwnzntujxoj&password=BEnByCtika4xy68v&sslmode=require
+    url: jdbc:postgresql://postgres:AkpJysoJYCkPnIpeGfOtCkYNYdnbIBCI@shuttle.proxy.rlwy.net:42626/railway
     username: postgres
-    password: BEnByCtika4xy68v
+    password: AkpJysoJYCkPnIpeGfOtCkYNYdnbIBCI
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
