@@ -35,7 +35,7 @@ public class JwtUtils {
             throw new IllegalStateException("JWT secret key is not set!");
         }
         if (jwtRefreshTokenExpirationMs == 0 && jwtAccessTokenExpirationMs == 0){
-            throw new IllegalStateException("Expiration miliSecond is not set!");
+            throw new IllegalStateException("Expiration mileSecond is not set!");
         }
         // Для HS512 требуется ключ >= 64 байт; используем один секрет для HS256 и HS512
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
