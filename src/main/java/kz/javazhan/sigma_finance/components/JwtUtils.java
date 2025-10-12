@@ -90,7 +90,7 @@ public class JwtUtils {
 
     private Claims extractAllClaims(String token) {
         return Jwts
-                .parserBuilder()
+                .parser()
                 .setSigningKey(signingKey)
                 .build()
                 .parseClaimsJws(token)
