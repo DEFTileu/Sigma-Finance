@@ -1,6 +1,7 @@
 package kz.javazhan.sigma_finance.config;
 
-public class Settings implements Cloneable{
+
+public class Settings{
     private String someValues1;
     private String someValues2;
 

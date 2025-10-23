@@ -2,6 +2,7 @@ package kz.javazhan.sigma_finance.controllers;
 
 import kz.javazhan.sigma_finance.domain.DTOS.AuthRequestDTO;
 import kz.javazhan.sigma_finance.domain.DTOS.AuthResponseDTO;
+import kz.javazhan.sigma_finance.domain.DTOS.UserDTO;
 import kz.javazhan.sigma_finance.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,12 @@ public class AuthController {
 
     @PostMapping("/register")
     ResponseEntity<AuthResponseDTO> registerUser(@RequestBody AuthRequestDTO request){
+        UserDTO userDTO = new UserDTO.UserDTOBuilder()
+                .setName(request.getName())
+                .setSurname(request.getSurname())
+                .setPatronymic(request.getPatronymic())
+                .setPhoneNumber(request.getPhoneNumber())
+                .build();
         AuthResponseDTO response = authService.register(request);
         return ResponseEntity.ok(response);
     }
